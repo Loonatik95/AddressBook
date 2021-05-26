@@ -1,4 +1,4 @@
-package addressbook;
+package addressbook.tests;
 
 import addressbook.appmanager.ApplicationManager;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +17,7 @@ public class TestBase {
     public void tearDown() {
         app.stop();
     }
-    
+
     public ApplicationManager getApp() {
         return app;
     }

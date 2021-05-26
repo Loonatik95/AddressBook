@@ -1,6 +1,5 @@
 package addressbook.tests;
 
-import addressbook.TestBase;
 import org.junit.jupiter.api.Test;
 
 public class ContactDeletionTests extends TestBase {

@@ -1,7 +1,6 @@
 package addressbook.tests;
 
 import addressbook.model.GroupDate;
-import addressbook.TestBase;
 import org.junit.jupiter.api.Test;
 
 public class GroupCreationTests extends TestBase {

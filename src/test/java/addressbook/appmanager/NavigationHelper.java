@@ -20,4 +20,8 @@ public class NavigationHelper extends HelperBase {
     public void buttonHome() {
         click(By.xpath("//a[text()='HOME']"));
     }
+
+    public void alert() {
+        driver.switchTo().alert().accept();
+    }
 }

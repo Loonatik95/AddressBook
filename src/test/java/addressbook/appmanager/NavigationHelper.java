@@ -10,6 +10,11 @@ public class NavigationHelper extends HelperBase {
     }
 
     public void gotoGroupPage() {
+        if (isElement(By.tagName("h1"))
+                && driver.findElement(By.tagName("h1")).getText().equals("Groups")
+                && isElement(By.linkText("groups"))) {
+            return;
+        }
         click(By.linkText("GROUPS"));
     }
 
@@ -17,11 +22,16 @@ public class NavigationHelper extends HelperBase {
         click(By.linkText("ADD_NEW"));
     }
 
-    public void buttonHome() {
+    public void gotoHomePage() {
+        if (isElement(By.id("maintable"))) {
+            return;
+        }
         click(By.xpath("//a[text()='HOME']"));
     }
 
     public void alert() {
         driver.switchTo().alert().accept();
     }
+
+
 }

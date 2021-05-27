@@ -35,4 +35,23 @@ public class GroupHelper extends HelperBase {
     public void deleteSelectedGroups() {
         click(By.name("delete"));
     }
+
+    public void initGroupModification() {
+        click(By.name("edit"));
+    }
+
+    public void submitGroupModification() {
+        click(By.name("update"));
+    }
+
+    public void createGroup(GroupDate group) {
+        initGroupCreation();
+        fillGroupForm(group);
+        submitGroupCreation();
+        returnToGroupPage();
+    }
+
+    public boolean isThereAGroup() {
+        return isElement(By.name("selected[]"));
+    }
 }

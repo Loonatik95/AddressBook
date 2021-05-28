@@ -27,7 +27,7 @@ public class ApplicationManager {
         }
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        driver.get("http://localhost/addressbook/group.php");
+        driver.get("http://localhost/addressbook");
         navigationHelper = new NavigationHelper(driver);
         groupHelper = new GroupHelper(driver);
         sessionHelper = new SessionHelper(driver);

@@ -26,7 +26,7 @@ public class HelperBase {
         }
     }
 
-    protected boolean isElement(By locator) {
+    protected boolean isElementPresented(By locator) {
         try {
             driver.findElement(locator);
             return true;

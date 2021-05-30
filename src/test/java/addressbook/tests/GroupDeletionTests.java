@@ -1,28 +1,30 @@
 package addressbook.tests;
 
 import addressbook.model.GroupDate;
-import org.junit.jupiter.api.Assertions;
+import addressbook.model.Groups;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GroupDeletionTests extends TestBase {
+    @BeforeEach
+    public void ensurePreconditions() {
+        app.goTo().groupPage();
+        if (app.group().all().size() == 0) {
+            app.group().create(new GroupDate().withName("test1"));
+        }
+    }
 
     @Test
     public void testGroupDeletion() {
-        app.getNavigationHelper().gotoGroupPage();
-        if (!app.getGroupHelper().isThereAGroup()) {
-            app.getGroupHelper().createGroup(new GroupDate("test1", null, null));
-        }
-        List<GroupDate> before = app.getGroupHelper().getGroupList();
-        app.getGroupHelper().selectGroup(before.size() - 1);
-        app.getGroupHelper().deleteSelectedGroups();
-        app.getGroupHelper().returnToGroupPage();
-        List<GroupDate> after = app.getGroupHelper().getGroupList();
-        Assertions.assertEquals(after.size(), before.size() - 1);
+        Groups before = app.group().all();
+        GroupDate deletedGroup = before.iterator().next();
+        app.group().delete(deletedGroup);
+        assertThat(app.group().count(), equalTo(before.size() - 1));
+        Groups after = app.group().all();
+        assertThat(after, equalTo(before.without(deletedGroup)));
 
-        before.remove(before.size() - 1);
-        Assertions.assertEquals(before, after);
     }
-
 }

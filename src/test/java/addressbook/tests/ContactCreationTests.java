@@ -10,13 +10,13 @@ public class ContactCreationTests extends TestBase {
 
     @Test
     public void testContactCreationTests() {
-        app.getNavigationHelper().gotoContactPage();
-        List<ContactDate> before = app.getContactHelper().getContactList();
-        ContactDate contact = new ContactDate("Sasha", "Karapuz", "Gomel",
-                "783890", "karapuz@tut.by", "[NONE]");
-        app.getContactHelper().fillContactForm(contact, true);
-        app.getContactHelper().submitContactCreation();
-        List<ContactDate> after = app.getContactHelper().getContactList();
+        app.goTo().contactPage();
+        List<ContactDate> before = app.contact().list();
+        ContactDate contact = new ContactDate().withFirstname("karapuz").withLastname("sasha")
+                .withAddress("gomel").withPhone("783097").withEmail("karapuz@tut.by");
+        app.contact().fillContactForm(contact, false);
+        app.contact().submitContactCreation();
+        List<ContactDate> after = app.contact().list();
         Assertions.assertEquals(after.size(), before.size());
 
         Assertions.assertEquals(before, after);

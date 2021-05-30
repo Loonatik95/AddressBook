@@ -2,32 +2,42 @@ package addressbook.model;
 
 public class ContactDate {
 
-    private final String firstname;
-    private final String lastname;
-    private final String address;
-    private final String phone;
-    private final String email;
-    private final String group;
+    private  String firstname;
+    private  String lastname;
+    private  String address;
+    private  String phone;
+    private  String email;
+    private  String group;
 
-
-    public ContactDate(String firstname, String lastname, String address, String phone, String email, String group) {
+    public ContactDate withFirstname(String firstname) {
         this.firstname = firstname;
+        return this;
+    }
+
+    public ContactDate withLastname(String lastname) {
         this.lastname = lastname;
+        return this;
+    }
+
+    public ContactDate withAddress(String address) {
         this.address = address;
+        return this;
+    }
+
+    public ContactDate withPhone(String phone) {
         this.phone = phone;
+        return this;
+    }
+
+    public ContactDate withEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public ContactDate withGroup(String group) {
         this.group = group;
+        return this;
     }
-
-    public ContactDate(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.address = null;
-        this.phone = null;
-        this.email = null;
-        this.group = null;
-    }
-
 
     public String getFirstname() {
         return firstname;

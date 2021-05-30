@@ -1,26 +1,10 @@
 package addressbook.model;
 
 public class GroupDate {
-    private int id;
-    private final String name;
-    private final String header;
-    private final String footer;
-
-
-    public GroupDate(String name, String header, String footer) {
-        this.id = Integer.MAX_VALUE;
-        this.name = name;
-        this.header = header;
-        this.footer = footer;
-    }
-
-    public GroupDate(int id, String name, String header, String footer) {
-        this.id = id;
-        this.name = name;
-        this.header = header;
-        this.footer = footer;
-    }
-
+    private int id = Integer.MAX_VALUE;;
+    private  String name;
+    private  String header;
+    private  String footer;
 
     public String getName() {
         return name;
@@ -38,8 +22,24 @@ public class GroupDate {
         return id;
     }
 
-    public void setId(int id) {
+    public GroupDate withHeader(String header) {
+        this.header = header;
+        return this;
+    }
+
+    public GroupDate withFooter(String footer) {
+        this.footer = footer;
+        return this;
+    }
+
+    public GroupDate withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public GroupDate withId(int id) {
         this.id = id;
+        return this;
     }
 
     @Override
@@ -57,11 +57,14 @@ public class GroupDate {
 
         GroupDate groupDate = (GroupDate) o;
 
+        if (id != groupDate.id) return false;
         return name != null ? name.equals(groupDate.name) : groupDate.name == null;
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 }

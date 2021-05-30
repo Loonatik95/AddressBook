@@ -1,11 +1,11 @@
 package addressbook.appmanager;
 
 import addressbook.model.GroupDate;
+import addressbook.model.Groups;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupHelper extends HelperBase {
@@ -32,8 +32,8 @@ public class GroupHelper extends HelperBase {
         click(By.name("new"));
     }
 
-    public void selectGroup(int idex) {
-        driver.findElements(By.name("selected[]")).get(idex).click();
+    public void selectGroupById(int id) {
+        driver.findElement(By.cssSelector("input[value='" + id + "']")).click();
     }
 
     public void deleteSelectedGroups() {
@@ -48,30 +48,47 @@ public class GroupHelper extends HelperBase {
         click(By.name("update"));
     }
 
-    public void createGroup(GroupDate group) {
+    public void create(GroupDate group) {
         initGroupCreation();
         fillGroupForm(group);
         submitGroupCreation();
+        groupsCache = null;
         returnToGroupPage();
     }
 
-    public boolean isThereAGroup() {
-        return isElementPresented(By.name("selected[]"));
-    }
+    private Groups groupsCache = null;
 
-    public int getGroupCount() {
-        return driver.findElements(By.name("selected[]")).size();
-    }
-
-    public List<GroupDate> getGroupList() {
-        List<GroupDate> groups = new ArrayList<>();
+    public Groups all() {
+        if (groupsCache != null){
+            return new Groups(groupsCache);
+        }
+        groupsCache = new Groups();
         List<WebElement> elements = driver.findElements(By.cssSelector("span.group"));
         for (WebElement element : elements) {
             String name = element.getText();
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-            GroupDate group = new GroupDate(id, name, null, null);
-            groups.add(group);
+            groupsCache.add(new GroupDate().withId(id).withName(name));
         }
-        return groups;
+        return new Groups(groupsCache);
+    }
+
+    public void modify(GroupDate group) {
+        selectGroupById(group.getId());
+        initGroupModification();
+        fillGroupForm(group);
+        submitGroupModification();
+        groupsCache = null;
+        returnToGroupPage();
+    }
+
+    public void delete(GroupDate group) {
+        selectGroupById(group.getId());
+        deleteSelectedGroups();
+        groupsCache = null;
+        returnToGroupPage();
+    }
+
+    public int count() {
+        return driver.findElements(By.name("selected[]")).size();
     }
 }

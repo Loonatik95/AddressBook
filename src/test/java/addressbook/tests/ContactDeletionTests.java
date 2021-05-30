@@ -2,27 +2,31 @@ package addressbook.tests;
 
 import addressbook.model.ContactDate;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 public class ContactDeletionTests extends TestBase {
+    @BeforeEach
+    public void ensurePreconditions(){
+        app.goTo().contactPage();
+        if (app.contact().list().size() == 0) {
+            app.contact().create(new ContactDate().withFirstname("karapuz").withLastname("sasha")
+                    .withAddress("gomel").withPhone("783097").withEmail("karapuz@tut.by"), true);
+        }
+    }
 
     @Test
     public void testContactDeletion() {
-        app.getNavigationHelper().gotoContactPage();
-        if (!app.getContactHelper().isThereAContact()) {
-            app.getContactHelper().createContact(new ContactDate("Sasha", "Karapuz", "Gomel",
-                    "783890", "karapuz@tut.by", "[NONE]"), true);
-        }
-        List<ContactDate> before = app.getContactHelper().getContactList();
-        app.getContactHelper().selectContact(before.size() - 1);
-        app.getContactHelper().buttonDeleteContact();
-        app.getNavigationHelper().alert();
-        List<ContactDate> after = app.getContactHelper().getContactList();
-        Assertions.assertEquals(after.size(), before.size() - 1);
+        List<ContactDate> before = app.contact().list();
+        int index = before.size() - 1;
+        app.contact().delete(index);
+        app.goTo().alert();
+        List<ContactDate> after = app.contact().list();
+        Assertions.assertEquals(after.size(), index);
 
-        before.remove(before.size() - 1);
+        before.remove(index);
         Assertions.assertEquals(before, after);
     }
 }

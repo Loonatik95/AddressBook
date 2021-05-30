@@ -2,30 +2,31 @@ package addressbook.tests;
 
 import addressbook.model.ContactDate;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 public class ContactModificationTests extends TestBase {
+    @BeforeEach
+    public void ensurePreconditions(){
+        app.goTo().contactPage();
+        if (app.contact().list().size() == 0) {
+            app.contact().create(new ContactDate().withFirstname("karapuz").withLastname("sasha")
+                    .withAddress("gomel").withPhone("783097").withEmail("karapuz@tut.by"), true);
+        }
+    }
 
     @Test
     public void testContactModification() {
-        app.getNavigationHelper().gotoContactPage();
-        if (!app.getContactHelper().isThereAContact()) {
-            app.getContactHelper().createContact(new ContactDate("Sasha", "Karapuz", "Gomel",
-                    "783890", "karapuz@tut.by", "[NONE]"), true);
-        }
-        List<ContactDate> before = app.getContactHelper().getContactList();
-        app.getContactHelper().selectContact(before.size() - 1);
-        app.getContactHelper().initContactModification();
-        ContactDate contact = new ContactDate("Sasha", "BigBoss");
-        app.getContactHelper().fillContactForm(contact, false);
-        app.getContactHelper().submitContactModification();
-        app.getContactHelper().returnToGroupPage();
-        List<ContactDate> after = app.getContactHelper().getContactList();
-        Assertions.assertEquals(after.size(), before.size());
+        List<ContactDate> before = app.contact().list();
+        int index = before.size() - 1;
+        ContactDate contact = new ContactDate().withFirstname("karapuz").withLastname("sasha");
+        app.contact().modify(index, contact);
+        List<ContactDate> after = app.contact().list();
+        Assertions.assertEquals(after.size(), index);
 
-        before.remove(before.size() - 1);
+        before.remove(index);
         before.add(contact);
         Assertions.assertEquals(before, after);
     }

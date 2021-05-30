@@ -7,10 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class ContactHelper extends HelperBase {
 
@@ -31,9 +28,10 @@ public class ContactHelper extends HelperBase {
 
         if (creation) {
             new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactDate.getGroup());
-        } else {
-            Assertions.assertTrue(isElementPresented(By.name("new_group")));
         }
+//        else {
+//            Assertions.assertTrue(isElementPresented(By.name("new_group")));
+//        }
     }
 
     public void selectContact(int idex) {
@@ -53,7 +51,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public void create(ContactDate contact, boolean c) {
-        fillContactForm(contact, true);
+        fillContactForm(contact, c);
         submitContactCreation();
         returnToGroupPage();
     }
@@ -68,7 +66,7 @@ public class ContactHelper extends HelperBase {
         initContactModification();
         fillContactForm(contact, false);
         submitContactModification();
-        returnToGroupPage();
+//        returnToGroupPage();
     }
 
     public void returnToGroupPage() {
@@ -87,6 +85,10 @@ public class ContactHelper extends HelperBase {
         }
         Collections.sort(contacts, comparator);
         return contacts;
+    }
+
+    public void returnHomePage() {
+        click(By.linkText("home page"));
     }
 
 //    public ContactDate infoFromEditForm(ContactDate contact) {

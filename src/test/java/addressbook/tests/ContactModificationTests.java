@@ -10,10 +10,11 @@ import java.util.List;
 public class ContactModificationTests extends TestBase {
     @BeforeEach
     public void ensurePreconditions(){
-        app.goTo().contactPage();
+//        app.goTo().contactPage();
         if (app.contact().list().size() == 0) {
+            app.goTo().contactPage();
             app.contact().create(new ContactDate().withFirstname("karapuz").withLastname("sasha")
-                    .withAddress("gomel").withPhone("783097").withEmail("karapuz@tut.by"), true);
+                    .withAddress("gomel").withPhone("783097").withEmail("karapuz@tut.by"), false);
         }
     }
 
@@ -21,13 +22,15 @@ public class ContactModificationTests extends TestBase {
     public void testContactModification() {
         List<ContactDate> before = app.contact().list();
         int index = before.size() - 1;
-        ContactDate contact = new ContactDate().withFirstname("karapuz").withLastname("sasha");
+        ContactDate contact = new ContactDate().withFirstname("karapuz").withLastname("sasha7");
+//        изменить кнопку update
         app.contact().modify(index, contact);
+        app.contact().returnHomePage();
         List<ContactDate> after = app.contact().list();
-        Assertions.assertEquals(after.size(), index);
+        Assertions.assertEquals(after.size(), before.size());
 
-        before.remove(index);
-        before.add(contact);
+//        before.remove(index);
+//        before.add(contact);
         Assertions.assertEquals(before, after);
     }
 }

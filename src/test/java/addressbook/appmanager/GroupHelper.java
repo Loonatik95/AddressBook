@@ -10,6 +10,8 @@ import java.util.List;
 
 public class GroupHelper extends HelperBase {
 
+    private Groups groupsCache = null;
+
     public GroupHelper(WebDriver driver) {
         super(driver);
     }
@@ -55,8 +57,6 @@ public class GroupHelper extends HelperBase {
         groupsCache = null;
         returnToGroupPage();
     }
-
-    private Groups groupsCache = null;
 
     public Groups all() {
         if (groupsCache != null){

@@ -1,15 +1,18 @@
 package addressbook.appmanager;
 
 import addressbook.model.ContactDate;
+import addressbook.model.Contacts;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.*;
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
+
+    private Contacts contactCache = null;
 
     public ContactHelper(WebDriver driver) {
         super(driver);
@@ -28,14 +31,13 @@ public class ContactHelper extends HelperBase {
 
         if (creation) {
             new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactDate.getGroup());
+        } else {
+            Assertions.assertFalse(isElementPresented(By.name("new_group")));
         }
-//        else {
-//            Assertions.assertTrue(isElementPresented(By.name("new_group")));
-//        }
     }
 
-    public void selectContact(int idex) {
-        driver.findElements(By.name("selected[]")).get(idex).click();
+    public void selectContact(int id) {
+        driver.findElement(By.cssSelector("input[value='" + id + "']")).click();
     }
 
     public void buttonDeleteContact() {
@@ -53,37 +55,49 @@ public class ContactHelper extends HelperBase {
     public void create(ContactDate contact, boolean c) {
         fillContactForm(contact, c);
         submitContactCreation();
-        returnToGroupPage();
+        contactCache = null;
+        returnHomePage();
     }
 
-    public void delete(int index) {
-        selectContact(index);
+    public void delete(ContactDate contact) {
+        selectContact(contact.getId());
         buttonDeleteContact();
+        contactCache = null;
     }
 
-    public void modify(int index, ContactDate contact) {
-        selectContact(index);
-        initContactModification();
+    public void showFullInfo(ContactDate contact) {
+        driver.findElement(By.cssSelector(String.format("a[href='view.php?id=%s'", contact.getId()))).click();
+    }
+
+    public void modify(ContactDate contact) {
+        initContactModification(contact);
         fillContactForm(contact, false);
         submitContactModification();
-//        returnToGroupPage();
+        contactCache = null;
+        returnToHomePage();
     }
 
-    public void returnToGroupPage() {
-        click(By.linkText("home page"));
+    public void returnToHomePage() {
+        click(By.xpath("//a[text()='HOME']"));
     }
 
-    public List<ContactDate> list() {
-        List<ContactDate> contacts = new ArrayList<>();
-        Comparator<ContactDate> comparator = Comparator.comparing(ContactDate::getFirstname)
-                .thenComparing(ContactDate::getLastname);
+
+    public Contacts all() {
+        if (contactCache != null) {
+            return new Contacts(contactCache);
+        }
+        Contacts contacts = new Contacts();
         List<WebElement> elements = driver.findElements(By.name("entry"));
         for (WebElement element : elements) {
             String lastname = element.findElement(By.xpath("./td[2]")).getText();
             String name = element.findElement(By.xpath("./td[3]")).getText();
-            contacts.add(new ContactDate().withFirstname(name).withLastname(lastname));
+            String adress = element.findElement(By.xpath("./td[4]")).getText();
+            String allEmails = element.findElement(By.xpath("./td[5]")).getText();
+            String allPhones = element.findElement(By.xpath("./td[6]")).getText();
+            int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+            contacts.add(new ContactDate().withFirstname(name).withLastname(lastname).withAllEmails(allEmails)
+                    .withAddress(adress).withAllPhones(allPhones));
         }
-        Collections.sort(contacts, comparator);
         return contacts;
     }
 
@@ -91,22 +105,34 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("home page"));
     }
 
-//    public ContactDate infoFromEditForm(ContactDate contact) {
+    public int count() {
+        return driver.findElements(By.name("selected[]")).size();
+    }
+
+    public ContactDate infoFromEditForm(ContactDate contact) {
 //        initContactModificationById(contact.getId());
-//        String firstname = driver.findElement(By.name("firstname")).getAttribute("value");
-//        String lastname = driver.findElement(By.name("lastname")).getAttribute("value");
-//        String home = driver.findElement(By.name("home")).getAttribute("value");
-//        String mobile = driver.findElement(By.name("mobile")).getAttribute("value");
-//        String work = driver.findElement(By.name("work")).getAttribute("value");
-//        driver.navigate().back();
-//        return new ContactDate().withId(contact.getId()).withFirstname(firstname).withLastname(lastname).
-//                withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work);
-//    }
-//
-//    private void initContactModificationById(int id){
-//        WebElement checkbox= driver.findElement(By.cssSelector(String.format("input[value='%s']", id)));
-//        WebElement row = checkbox.findElement(By.xpath("./../.."));
-//        List<WebElement> cells = row.findElements(By.tagName("td"));
-//        cells.get(7).findElement(By.tagName("a")).click();
-//    }
+        initContactModification(contact);
+        String firstname = driver.findElement(By.name("firstname")).getAttribute("value");
+        String lastname = driver.findElement(By.name("lastname")).getAttribute("value");
+        String home = driver.findElement(By.name("home")).getAttribute("value");
+        String mobile = driver.findElement(By.name("mobile")).getAttribute("value");
+        String work = driver.findElement(By.name("work")).getAttribute("value");
+        String address = driver.findElement(By.name("address")).getAttribute("value");
+        String email1 = driver.findElement(By.name("email")).getAttribute("value");
+        String email2 = driver.findElement(By.name("email2")).getAttribute("value");
+        String email3 = driver.findElement(By.name("email3")).getAttribute("value");
+        driver.navigate().back();
+        return new ContactDate().withId(contact.getId()).withFirstname(firstname).withLastname(lastname)
+                .withPhone(home).withMobilePhone(mobile).withWorkPhone(work).withAddress(address).withEmail(email1)
+                .withEmail2(email2).withEmail3(email3);
+    }
+
+    private void initContactModification(ContactDate contact) {
+        driver.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s'", contact.getId()))).click();
+    }
+
+    public String fullContactInfo() {
+        return driver.findElement(By.id("content")).getText();
+    }
+
 }

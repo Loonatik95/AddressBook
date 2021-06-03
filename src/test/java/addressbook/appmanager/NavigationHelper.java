@@ -23,9 +23,9 @@ public class NavigationHelper extends HelperBase {
     }
 
     public void gotoHomePage() {
-        if (isElementPresented(By.id("maintable"))) {
-            return;
-        }
+//        if (isElementPresented(By.id("maintable"))) {
+//            return;
+//        }
         click(By.xpath("//a[text()='HOME']"));
     }
 

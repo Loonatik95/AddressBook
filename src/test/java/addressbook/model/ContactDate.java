@@ -2,12 +2,20 @@ package addressbook.model;
 
 public class ContactDate {
 
-    private  String firstname;
-    private  String lastname;
-    private  String address;
-    private  String phone;
-    private  String email;
-    private  String group;
+    private String firstname;
+    private String lastname;
+    private String address;
+    private String phone;
+    private String email;
+    private String group;
+    private String mobile;
+    private String work;
+    private int id;
+    private String email2;
+    private String email3;
+    private String allEmails;
+    private String allPhones;
+
 
     public ContactDate withFirstname(String firstname) {
         this.firstname = firstname;
@@ -39,6 +47,65 @@ public class ContactDate {
         return this;
     }
 
+    public ContactDate withId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public ContactDate withMobilePhone(String mobile) {
+        this.mobile = mobile;
+        return this;
+    }
+
+    public ContactDate withWorkPhone(String work) {
+        this.work = work;
+        return this;
+    }
+
+    public ContactDate withEmail2(String email2) {
+        this.email2 = email2;
+        return this;
+    }
+
+    public ContactDate withEmail3(String email3) {
+        this.email3 = email3;
+        return this;
+    }
+
+    public ContactDate withAllEmails(String emails) {
+        this.allEmails = emails;
+        return this;
+    }
+
+    public ContactDate withAllPhones(String phones) {
+        this.allPhones = phones;
+        return this;
+    }
+
+    public String getAllPhones() {
+        return allPhones;
+    }
+
+    public String getAllEmails() {
+        return allEmails;
+    }
+
+    public String getEmail2() {
+        return email2;
+    }
+
+    public String getEmail3() {
+        return email3;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public String getWork() {
+        return work;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -62,6 +129,15 @@ public class ContactDate {
     public String getGroup() {
         return group;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getFullName() {
+        return firstname + " " + lastname;
+    }
+
 
     @Override
     public String toString() {

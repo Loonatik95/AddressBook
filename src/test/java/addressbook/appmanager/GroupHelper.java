@@ -59,7 +59,7 @@ public class GroupHelper extends HelperBase {
     }
 
     public Groups all() {
-        if (groupsCache != null){
+        if (groupsCache != null) {
             return new Groups(groupsCache);
         }
         groupsCache = new Groups();

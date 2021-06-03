@@ -1,26 +1,26 @@
 package addressbook.tests;
 
 import addressbook.model.ContactDate;
-import org.junit.jupiter.api.Assertions;
+import addressbook.model.Contacts;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
 
     @Test
     public void testContactCreationTests() {
-        List<ContactDate> before = app.contact().list();
+        Contacts before = app.contact().all();
         app.goTo().contactPage();
         ContactDate contact = new ContactDate().withFirstname("karapuz").withLastname("sasha")
                 .withAddress("gomel").withPhone("783097").withEmail("karapuz@tut.by");
         app.contact().fillContactForm(contact, false);
         app.contact().submitContactCreation();
         app.contact().returnHomePage();
-        List<ContactDate> after = app.contact().list();
-        Assertions.assertEquals(after.size(), before.size() + 1);
 
-        before.add(contact);
-        Assertions.assertEquals(before, after);
+
+        Contacts after = app.contact().all();
+        assertThat(after.size(), equalTo(before.size()));
     }
 }

@@ -1,10 +1,10 @@
 package addressbook.model;
 
 public class GroupDate {
-    private int id = Integer.MAX_VALUE;;
-    private  String name;
-    private  String header;
-    private  String footer;
+    private int id = Integer.MAX_VALUE;
+    private String name;
+    private String header;
+    private String footer;
 
     public String getName() {
         return name;
